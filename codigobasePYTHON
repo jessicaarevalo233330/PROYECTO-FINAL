@@ -1,0 +1,75 @@
+import tkinter as tk
+import mysql.connector
+
+# Conectar a la base de datos MySQL
+conexion = mysql.connector.connect(user="root", password="root",
+                                    host="localhost",
+                                    database='proyecto',
+                                    port='3306')
+cursor = conexion.cursor()
+
+# Función para guardar datos en la base de datos; tient nombre por numero; esto cambiarlo al nombre de lo que se introducira
+def guardar_en_base_de_datos():
+    #.get es para recibir los datos ////////// int y float se van cambiando segun los datos que quieramos incertar...
+    # ...si en la tabla dice char entonces se usa float y asi
+    uno= int(entry_uno.get())
+    dos=int(entry_dos.get())
+    tres = entry_tres.get()
+    cuatro= int(entry_cuatro.get())
+    cinco = float(entry_cinco.get())
+    #pueden agregar mas si es necesario
+
+
+    # Insertar los datos en la base de datos
+    # cambiar "compras" por el nombre de la tabla y agregar los nombres de los campos, si hay mas campos agregar mas %s, 
+    cursor.execute("INSERT INTO compras (idcompras, idproducto, nombre, cantidad, precio) VALUES (%s,%s,%s, %s, %s)", (uno,dos, tres, cuatro, cinco))
+    conexion.commit()
+      
+    # Limpiar los campos de entrada cuando se da guardar
+    entry_uno.delete(0,"end")
+    entry_dos.delete(0,"end")
+    entry_tres.delete(0, "end")
+    entry_cuatro.delete(0, "end")
+    entry_cinco.delete(0, "end")
+
+# Crear la ventana principal
+ventana = tk.Tk()
+ventana.title("Sistema de Inventario")
+
+
+
+# Etiquetas y campos de entrada
+# Etiquetas y campos de entrada
+label_uno = tk.Label(ventana, text="datos uno ")
+label_uno.pack()
+entry_uno = tk.Entry(ventana)
+entry_uno.pack()
+
+label_dos = tk.Label(ventana, text="datos dos ")
+label_dos.pack()
+entry_dos = tk.Entry(ventana)
+entry_dos.pack()
+
+label_tres = tk.Label(ventana, text="datos tres")
+label_tres.pack()
+entry_tres = tk.Entry(ventana)
+entry_tres.pack()
+
+label_cuatro = tk.Label(ventana, text="datos cuatro")
+label_cuatro.pack()
+entry_cuatro = tk.Entry(ventana)
+entry_cuatro.pack()
+
+label_cinco = tk.Label(ventana, text="datos cinco")
+label_cinco.pack()
+entry_cinco = tk.Entry(ventana)
+entry_cinco.pack()
+
+# Botón para guardar los datos
+boton_guardar = tk.Button(ventana, text="Guardar en la base de datos", command=guardar_en_base_de_datos)
+boton_guardar.pack()
+
+ventana.mainloop()
+
+# Cerrar la conexión a la base de datos al salir de la aplicación
+conexion.close()
